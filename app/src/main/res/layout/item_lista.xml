@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
 
     <TextView android:id="@+id/categoria"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="41dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:background="?android:selectableItemBackground"
@@ -12,7 +14,7 @@
         android:focusable="true"
         android:textSize="24sp" />
 
-    <!--TextView android:id="@+id/categoriacodigo"
+    <TextView android:id="@+id/categoriacodigo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -20,6 +22,5 @@
         android:background="?android:selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="24sp"
-        android:textColor="#FFFFFF"/-->
-</RelativeLayout>
+        android:textSize="16sp"/>
+</LinearLayout>

@@ -33,12 +33,12 @@ public class AdaptadorCategorias extends ArrayAdapter
         }
 
         TextView categoria = (TextView)v.findViewById(R.id.categoria);
-        //TextView categoriaCodigo = (TextView)v.findViewById(R.id.categoriacodigo);
+        TextView categoriaCodigo = (TextView)v.findViewById(R.id.categoriacodigo);
 
         Categoria item = (Categoria)getItem(position);
 
         categoria.setText(item.getNombre());
-        //categoriaCodigo.setText(item.getCodigo());
+        categoriaCodigo.setText(item.getCodigo());
 
         return v;
     }

@@ -53,6 +53,6 @@ public class JsonServicioClienteCategoria extends AsyncTask<URL, Void, List<Cate
         }
 
 
-        return null;
+        return categorias;
     }
 }

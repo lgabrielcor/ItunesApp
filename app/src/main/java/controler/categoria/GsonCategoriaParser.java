@@ -17,31 +17,53 @@ import model.Categoria;
 public class GsonCategoriaParser {
     public List readJsonStream(InputStream in) throws IOException {
 
-        Gson gson = new Gson();
 
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         List categorias = new ArrayList();
         reader.beginObject();
 
         while (reader.hasNext()) {
-            //busca los subgeneros
 
+            String name = reader.nextName();
 
-            String subgenres = reader.nextName();
-            if (subgenres.contains("subgenres") && !subgenres.isEmpty()) {
-                //recorre los objetos
-                while (reader.hasNext()) {
-                    Categoria categoria = new Categoria();
-                    //categoria.setCodigo(String.valueOf(reader.nextInt()));
-                    categoria.setCodigo("0");
-                    categoria.setNombre("prueba");
-                    categorias.add(categoria);
+            reader.beginObject();
+            while(reader.hasNext()){
+
+                name = reader.nextName();
+                String value="";
+                if(name.equals("name")||name.equals("id")||name.equals("url")){
+                    value = reader.nextString();
+                }
+                else if(name.equals("rssUrls")||name.equals("chartUrls")) {
+                    reader.skipValue();
                 }
 
-                //Categoria categoria = gson.fromJson(reader, Categoria.class);
+                if (name.contains("subgenres")) {
+                    //recorre los objetos
+                    reader.beginObject();
+                    while (reader.hasNext()) {
 
+                        Categoria categoria = new Categoria();
+
+                        categoria.setCodigo(reader.nextName());
+
+
+                        reader.beginObject();
+                        while (reader.hasNext()){
+                            name = reader.nextName();
+                            if(name.equals("name")){
+                                categoria.setNombre(reader.nextString());
+                            }else {
+                                reader.skipValue();
+                            }
+                        }
+                        reader.endObject();
+                        categorias.add(categoria);
+                    }
+                    reader.endObject();
+                }
             }
-
+            reader.endObject();
         }
         reader.endObject();
         reader.close();

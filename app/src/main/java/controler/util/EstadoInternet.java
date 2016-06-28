@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * Created by luisgabrielcorredorcombita on 27/06/16.
+ * Created by luisgabrielcorredorcombita on 27/06/16
  */
 public class EstadoInternet {
     static public boolean isOnline(Context context) {

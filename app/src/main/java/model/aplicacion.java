@@ -5,10 +5,12 @@ package model;
  */
 public class Aplicacion {
     private String nombre;
-    private String imagen;
+    private String imagenURL;
+    private byte[] imagebyte;
     private String resumen;
     private String precio;
     private String ultimaActualizacion;
+    private String categoria;
 
     public String getNombre() {
         return nombre;
@@ -19,11 +21,11 @@ public class Aplicacion {
     }
 
     public String getImagen() {
-        return imagen;
+        return imagenURL;
     }
 
     public void setImagen(String imagen) {
-        this.imagen = imagen;
+        this.imagenURL = imagen;
     }
 
     public String getResumen() {
@@ -48,5 +50,21 @@ public class Aplicacion {
 
     public void setUltimaActualizacion(String ultimaActualizacion) {
         this.ultimaActualizacion = ultimaActualizacion;
+    }
+
+    public byte[] getImagebyte() {
+        return imagebyte;
+    }
+
+    public void setImagebyte(byte[] imagebyte) {
+        this.imagebyte = imagebyte;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

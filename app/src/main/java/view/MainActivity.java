@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import app.lugcor.co.com.itunesapp.R;
-import controler.aplicacion.JsonServicioClienteAplicacion;
+//import controler.categoria.JsonServicioClienteAplicacion;
 import controler.categoria.AdaptadorCategorias;
 import controler.categoria.JsonServicioClienteCategoria;
 import model.Categoria;

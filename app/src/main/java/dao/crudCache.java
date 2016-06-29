@@ -7,7 +7,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,7 +30,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
             "\t`nombreCategoria`\tTEXT NOT NULL\n" +
             ");";
 
-    String creadorAplicacion ="CREATE TABLE `aplicacion` (\n" +
+    String creadorAplicacion ="CREATE TABLE `controler.aplicacion` (\n" +
             "\t`idAplicacion`\tTEXT NOT NULL,\n" +
             "\t`nombre`\tTEXT NOT NULL,\n" +
             "\t`resumen`\tTEXT NOT NULL,\n" +
@@ -87,7 +86,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
                 valores.put("imagen", getLogoImage(obj.getNombre()));
 
 
-                final long categoria = db.insert("aplicacion", null, valores);
+                final long categoria = db.insert("controler/aplicacion", null, valores);
 
                 db.close();
 
@@ -157,7 +156,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
 
         String[] args = new String[] {categoria};
 
-        Cursor c = db.query("aplicacion", valores_recuperar,
+        Cursor c = db.query("controler/aplicacion", valores_recuperar,
                 "categoria=?", args, null, null, null, null);
 
         c.moveToFirst();

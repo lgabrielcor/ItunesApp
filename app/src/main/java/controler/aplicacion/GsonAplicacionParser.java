@@ -1,4 +1,4 @@
-package aplicacion;
+package controler.aplicacion;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;

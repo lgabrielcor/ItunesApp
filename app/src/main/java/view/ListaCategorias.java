@@ -1,7 +1,11 @@
 package view;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -11,12 +15,11 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import app.lugcor.co.com.itunesapp.R;
-//import controler.categoria.JsonServicioClienteAplicacion;
 import controler.categoria.AdaptadorCategorias;
 import controler.categoria.JsonServicioClienteCategoria;
 import model.Categoria;
 
-public class MainActivity extends AppCompatActivity {
+public class ListaCategorias extends AppCompatActivity {
 
     ListView listaCategorias;
     ArrayAdapter adaptadorCategorias;
@@ -39,6 +42,21 @@ public class MainActivity extends AppCompatActivity {
             adaptadorCategorias = new AdaptadorCategorias(this, categoriasdts);
 
             listaCategorias.setAdapter(adaptadorCategorias);
+            listaCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getBaseContext(), ListaAplicaciones.class);
+                    Log.d("evento geneado"+position, "evento");
+                    startActivity(intent);
+                }
+            });
+
+            listaCategorias.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("evento geneado", "evento");
+                }
+            });
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

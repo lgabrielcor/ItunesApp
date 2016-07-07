@@ -1,5 +1,6 @@
 package view;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,9 +18,11 @@ import java.util.concurrent.ExecutionException;
 import app.lugcor.co.com.itunesapp.R;
 import controler.categoria.AdaptadorCategorias;
 import controler.categoria.JsonServicioClienteCategoria;
+import controler.util.EstadoInternet;
+import dao.crudCache;
 import model.Categoria;
 
-public class ListaCategorias extends AppCompatActivity {
+public class ListaCategorias extends Activity {
 
     ListView listaCategorias;
     ArrayAdapter adaptadorCategorias;
@@ -33,12 +36,19 @@ public class ListaCategorias extends AppCompatActivity {
         listaCategorias = (ListView)findViewById(R.id.listViewCategorias2);
 
         try {
-            URL url = new URL("https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
-            //"https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36"
+            final List<Categoria> categoriasdts;
+            if(EstadoInternet.isOnline(getBaseContext())) {
+                URL url = new URL("https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
+                //"https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36"
 
-            JsonServicioClienteCategoria json = new JsonServicioClienteCategoria();
-            json.execute(url);
-            final List<Categoria> categoriasdts = json.get();
+                JsonServicioClienteCategoria json = new JsonServicioClienteCategoria();
+                json.setContext(getBaseContext());
+                json.execute(url);
+                categoriasdts = json.get();
+            }
+            else{
+                categoriasdts = new crudCache(getBaseContext()).getObjectsCategoria();
+            }
             adaptadorCategorias = new AdaptadorCategorias(this, categoriasdts);
 
             listaCategorias.setAdapter(adaptadorCategorias);

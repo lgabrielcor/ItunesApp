@@ -1,5 +1,6 @@
 package controler.categoria;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import model.Categoria;
@@ -19,6 +20,11 @@ import java.util.List;
 public class JsonServicioClienteCategoria extends AsyncTask<URL, Void, List<Categoria>> {
 
     HttpURLConnection con = null;
+    Context context;
+
+    public void setContext(Context context){
+        this.context=context;
+    }
 
     @Override
     protected List<Categoria> doInBackground(URL... urls) {
@@ -41,7 +47,7 @@ public class JsonServicioClienteCategoria extends AsyncTask<URL, Void, List<Cate
                 InputStream in = new BufferedInputStream(con.getInputStream());
 
                 //llamar el parser
-                GsonCategoriaParser parser = new GsonCategoriaParser();
+                GsonCategoriaParser parser = new GsonCategoriaParser(this.context);
 
                 categorias = parser.readJsonStream(in);
 

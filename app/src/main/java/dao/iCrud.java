@@ -14,4 +14,6 @@ public interface iCrud {
     List<Categoria> getObjectsCategoria();
     List<Aplicacion> getObjectsAplicacion(String categoria);
     void resetData();
+    void resetDataCategorias();
+    void resetDataAplicaciones();
 }

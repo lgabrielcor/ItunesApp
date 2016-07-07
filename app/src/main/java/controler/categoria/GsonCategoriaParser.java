@@ -1,5 +1,7 @@
 package controler.categoria;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
@@ -9,12 +11,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.crudCache;
 import model.Categoria;
 
 /**
  * Created by luisgabrielcorredorcombita on 24/06/16.
  */
-public class GsonCategoriaParser {
+public class GsonCategoriaParser
+{
+    Context context;
+    public GsonCategoriaParser(Context context){
+        this.context=context;
+    }
     public List readJsonStream(InputStream in) throws IOException {
 
 
@@ -67,6 +75,9 @@ public class GsonCategoriaParser {
         }
         reader.endObject();
         reader.close();
+
+        new crudCache(this.context).resetDataCategorias();
+        new crudCache(this.context).insertDataCategoria(categorias);
 
         return categorias;
     }

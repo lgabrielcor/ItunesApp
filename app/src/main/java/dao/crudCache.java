@@ -25,7 +25,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
     private static final java.lang.String SQL_CREATE_ENTRIES = "" ;
     private static final java.lang.String SQL_DELETE_ENTRIES = "";
 
-    String creadorCategoria= "CREATE TABLE `categoria` (\n" +
+    String creadorCategoria= " CREATE TABLE `categoria` (\n" +
             "\t`idCategoria`\tTEXT NOT NULL,\n" +
             "\t`nombreCategoria`\tTEXT NOT NULL\n" +
             ");";
@@ -184,6 +184,19 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
     public void resetData() {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + creadorCategoria);
+        db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
+    }
+
+    @Override
+    public void resetDataCategorias() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + creadorCategoria);
+
+    }
+
+    @Override
+    public void resetDataAplicaciones() {
+        SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
     }
 

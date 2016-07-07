@@ -9,4 +9,86 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="view.AplicacionDetalle">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="296dp"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="nombre"
+                android:id="@+id/nombre"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="categoria"
+                android:id="@+id/categoria"
+                android:layout_below="@+id/nombre"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="precio"
+                android:id="@+id/precio"
+                android:layout_below="@+id/categoria"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="resumen"
+                android:id="@+id/resumen"
+                android:layout_below="@+id/precio"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="37dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="actualizacion"
+                android:id="@+id/actualizacion"
+                android:layout_below="@+id/resumen"
+                android:layout_alignRight="@+id/resumen"
+                android:layout_alignEnd="@+id/resumen" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="218dp"
+                android:weightSum="1"
+                android:layout_marginBottom="39dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:layout_width="83dp"
+                    android:layout_height="570dp"
+                    android:id="@+id/imageView"
+                    android:layout_weight="0.62" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
 </RelativeLayout>

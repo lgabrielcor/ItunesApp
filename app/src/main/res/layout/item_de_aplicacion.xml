@@ -6,11 +6,11 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="290dp"
+        android:layout_width="300dp"
         android:layout_height="77dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Nombre aplicacion"
@@ -32,8 +32,8 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="91dp"
-        android:layout_height="73dp"
+        android:layout_width="match_parent"
+        android:layout_height="86dp"
         android:id="@+id/image_aplicacion"
         android:layout_gravity="right" />
 

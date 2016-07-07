@@ -1,6 +1,7 @@
 package view;
 
 import android.content.Intent;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,33 +30,41 @@ public class ListaAplicaciones extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_lista_aplicaciones);
+
+        listaAplicaciones=(ListView)findViewById(R.id.listViewAplicaciones);
 
         try {
 
-            URL url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
+            URL url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre=6018/json");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
             //"https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36"
             JsonServicioClienteAplicacion json = new JsonServicioClienteAplicacion();
             json.execute(url);
-            List<Aplicacion> aplicacionesdts = json.get();
+            final List<Aplicacion> aplicacionesdts = json.get();
 
             adaptadorAplicaciones = new AdaptadorAplicaciones(this, aplicacionesdts);
 
             listaAplicaciones.setAdapter(adaptadorAplicaciones);
-            listaAplicaciones.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Intent intent = new Intent(getBaseContext(), AplicacionDetalle.class);
-                    Log.d("evento generado", "evento");
-                    startActivity(intent);
-                }
-            });
             listaAplicaciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(getBaseContext(), AplicacionDetalle.class);
                     Log.d("evento geneado"+position, "evento");
+                    //pasar parametros a detalle de aplicacion
+                    Aplicacion detalle = aplicacionesdts.get(position);
+
+                    intent.putExtra("nombre", detalle.getNombre());
+                    intent.putExtra("precio", detalle.getPrecio());
+                    intent.putExtra("resumen", detalle.getResumen());
+                    intent.putExtra("actualizacion", detalle.getUltimaActualizacion());
+                    intent.putExtra("categoria", detalle.getCategoria());
+                    intent.putExtra("imagen", detalle.getImagen());
+
+
                     startActivity(intent);
                 }
             });

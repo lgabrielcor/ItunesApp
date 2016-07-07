@@ -1,13 +1,19 @@
 package controler.aplicacion;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import model.Aplicacion;
 
@@ -18,34 +24,59 @@ public class GsonAplicacionParser {
     public List readJsonStream(InputStream in) throws IOException {
 
         Gson gson = new Gson();
-
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        Aplicacion aplicacion;
         List aplicaciones = new ArrayList();
-        reader.beginObject();
 
-        while (reader.hasNext()) {
-            //busca los subgeneros
+        try {
+            JSONObject reader = new JSONObject(convertStreamToString(in));
+            JSONArray entry = reader.optJSONObject("feed").getJSONArray("entry");
 
 
-            String subgenres = reader.nextName();
-            if (subgenres.contains("subgenres") && !subgenres.isEmpty()) {
-                //recorre los objetos
-                while (reader.hasNext()) {
-                    Aplicacion aplicacion = new Aplicacion();
-                    //categoria.setCodigo(String.valueOf(reader.nextInt()));
-                    //categoria.setCodigo("0");
-                    //categoria.setNombre("prueba");
-                    aplicaciones.add(aplicacion);
-                }
+            for (int i =0; i< entry.length(); i++) {
+                aplicacion = new Aplicacion();
+                JSONObject jsonObject = entry.getJSONObject(i);
 
-                //Categoria categoria = gson.fromJson(reader, Categoria.class);
+                aplicacion.setNombre(jsonObject.getJSONObject("im:name").optString("label"));
+                aplicacion.setImagen(jsonObject.getJSONArray("im:image").getJSONObject(0).optString("label"));
+                aplicacion.setResumen(jsonObject.getJSONObject("summary").optString("label"));
 
+
+                aplicacion.setPrecio(jsonObject.getJSONObject("im:price").getJSONObject("attributes").optString("currency")+
+                        jsonObject.getJSONObject("im:price").getJSONObject("attributes").optString("amount"));
+
+                aplicacion.setCategoria(jsonObject.getJSONObject("category").getJSONObject("attributes").optString("label"));
+
+                aplicacion.setUltimaActualizacion(jsonObject.getJSONObject("im:releaseDate").optString("label"));
+
+                aplicaciones.add(aplicacion);
             }
 
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        reader.endArray();
-        reader.close();
 
         return aplicaciones;
+    }
+
+    private String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
     }
 }

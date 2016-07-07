@@ -22,7 +22,7 @@ import model.Categoria;
 public class ListaCategorias extends AppCompatActivity {
 
     ListView listaCategorias;
-    ArrayAdapter adaptadorCategorias;
+    AdaptadorCategorias adaptadorCategorias;
 
 
     @Override
@@ -42,21 +42,28 @@ public class ListaCategorias extends AppCompatActivity {
             adaptadorCategorias = new AdaptadorCategorias(this, categoriasdts);
 
             listaCategorias.setAdapter(adaptadorCategorias);
+
             listaCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getBaseContext(), ListaAplicaciones.class);
-                    Log.d("evento geneado"+position, "evento");
-                    startActivity(intent);
+
+                    try {
+                        Log.d("evento geneado" + position, "evento");
+                        startActivity(new Intent(ListaCategorias.this, ListaAplicaciones.class));
+                    }catch(Exception e){
+
+                        e.printStackTrace();
+                    }
                 }
             });
 
-            listaCategorias.setOnClickListener(new View.OnClickListener() {
+
+           /* listaCategorias.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d("evento geneado", "evento");
                 }
-            });
+            });*/
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

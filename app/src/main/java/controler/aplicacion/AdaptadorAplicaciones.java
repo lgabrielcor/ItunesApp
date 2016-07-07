@@ -1,12 +1,18 @@
 package controler.aplicacion;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import app.lugcor.co.com.itunesapp.R;
@@ -36,6 +42,7 @@ public class AdaptadorAplicaciones extends ArrayAdapter
         TextView nombreAplicacion = (TextView)v.findViewById(R.id.nombre_aplicacion);
         TextView precio = (TextView)v.findViewById(R.id.precio_aplicacion);
         TextView ultimaActualizacion = (TextView)v.findViewById(R.id.ultima_actualizacion);
+        ImageView imagen = (ImageView)v.findViewById(R.id.image_aplicacion);
 
         Aplicacion item = (Aplicacion)getItem(position);
 
@@ -45,7 +52,17 @@ public class AdaptadorAplicaciones extends ArrayAdapter
 
         nombreAplicacion.setText(item.getNombre());
         precio.setText(item.getPrecio());
-        ultimaActualizacion.setText(item.getUltimaActualizacion());
+        ultimaActualizacion.setText("Ultima Versiòn: "+item.getUltimaActualizacion());
+        URL url = null;
+        try {
+            url = new URL(item.getImagen());
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            imagen.setImageBitmap(bmp);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         return v;

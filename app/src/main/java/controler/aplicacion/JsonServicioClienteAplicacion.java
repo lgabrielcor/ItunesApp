@@ -53,6 +53,6 @@ public class JsonServicioClienteAplicacion extends AsyncTask<URL, Void, List<Apl
         }
 
 
-        return null;
+        return aplicaciones;
     }
 }

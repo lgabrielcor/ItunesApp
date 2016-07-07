@@ -23,7 +23,7 @@
         <activity
             android:name="view.ListaCategorias"
             android:label="@string/app_name" />
-        <activity android:name="view.ListaAplicaciones" />
+        <activity android:name="view.ListaAplicaciones" android:label="@string/app_name" />
         <activity android:name="view.AplicacionDetalle"></activity>
     </application>
 

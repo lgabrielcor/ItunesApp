@@ -17,35 +17,17 @@ import model.Categoria;
 /**
  * Created by luisgabrielcorredorcombita on 25/06/16.
  */
-public class AdaptadorCategorias extends BaseAdapter
+public class AdaptadorCategorias extends ArrayAdapter
 {
-    Context context;
-    List data;
     private static LayoutInflater inflater = null;
+
     public AdaptadorCategorias(Context context, List objects) {
-        this.context=context;
-        this.data=objects;
-        inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return data.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return data.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+        super(context, android.R.layout.two_line_list_item, objects);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
+        LayoutInflater inflater = (LayoutInflater)getContext() .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = convertView;
 

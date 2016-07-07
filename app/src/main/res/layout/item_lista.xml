@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:showDividers="middle"
+    android:weightSum="1">
 
 
     <TextView android:id="@+id/categoria"
@@ -9,10 +11,10 @@
         android:layout_height="41dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:background="?android:selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:textSize="24sp" />
+        android:clickable="false"
+        android:focusable="false"
+        android:textSize="24sp"
+        android:text="categoria" />
 
     <TextView android:id="@+id/categoriacodigo"
         android:layout_width="match_parent"
@@ -21,5 +23,6 @@
         android:layout_centerInParent="true"
         android:clickable="true"
         android:focusable="true"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:text="categoriacodigo" />
 </LinearLayout>

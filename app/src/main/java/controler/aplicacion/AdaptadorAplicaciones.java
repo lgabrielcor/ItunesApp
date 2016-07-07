@@ -46,10 +46,6 @@ public class AdaptadorAplicaciones extends ArrayAdapter
 
         Aplicacion item = (Aplicacion)getItem(position);
 
-        /*
-        * TODO: falta categoria, imagen, imegen byte, resumen para el adapter array
-        * */
-
         nombreAplicacion.setText(item.getNombre());
         precio.setText(item.getPrecio());
         ultimaActualizacion.setText("Ultima Versiòn: "+item.getUltimaActualizacion());

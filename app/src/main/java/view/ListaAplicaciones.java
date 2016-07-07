@@ -38,9 +38,16 @@ public class ListaAplicaciones extends AppCompatActivity {
         listaAplicaciones=(ListView)findViewById(R.id.listViewAplicaciones);
 
         try {
+            Bundle extras = getIntent().getExtras();
+            URL url;
+            if(extras!= null){
+                url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre="+extras.getString("categoria")+"/json");
+            }
+            else{
+                url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre=6005/json");
+            }
 
-            URL url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre=6018/json");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
-            //"https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36"
+
             JsonServicioClienteAplicacion json = new JsonServicioClienteAplicacion();
             json.execute(url);
             final List<Aplicacion> aplicacionesdts = json.get();

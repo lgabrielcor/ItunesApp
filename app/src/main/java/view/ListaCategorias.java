@@ -22,15 +22,15 @@ import model.Categoria;
 public class ListaCategorias extends AppCompatActivity {
 
     ListView listaCategorias;
-    AdaptadorCategorias adaptadorCategorias;
+    ArrayAdapter adaptadorCategorias;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.mainactivity);
 
-        listaCategorias = (ListView)findViewById(R.id.listViewCategoria);
+        listaCategorias = (ListView)findViewById(R.id.listViewCategorias2);
 
         try {
             URL url = new URL("https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
@@ -38,7 +38,7 @@ public class ListaCategorias extends AppCompatActivity {
 
             JsonServicioClienteCategoria json = new JsonServicioClienteCategoria();
             json.execute(url);
-            List<Categoria> categoriasdts = json.get();
+            final List<Categoria> categoriasdts = json.get();
             adaptadorCategorias = new AdaptadorCategorias(this, categoriasdts);
 
             listaCategorias.setAdapter(adaptadorCategorias);
@@ -48,8 +48,9 @@ public class ListaCategorias extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     try {
-                        Log.d("evento geneado" + position, "evento");
-                        startActivity(new Intent(ListaCategorias.this, ListaAplicaciones.class));
+                        Intent intent = new Intent(getBaseContext(), ListaAplicaciones.class);
+                        intent.putExtra("categoria", categoriasdts.get(position).getCodigo());
+                        startActivity(intent);
                     }catch(Exception e){
 
                         e.printStackTrace();
@@ -57,13 +58,6 @@ public class ListaCategorias extends AppCompatActivity {
                 }
             });
 
-
-           /* listaCategorias.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("evento geneado", "evento");
-                }
-            });*/
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

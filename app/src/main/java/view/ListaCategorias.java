@@ -26,8 +26,7 @@ public class ListaCategorias extends Activity {
 
     ListView listaCategorias;
     ArrayAdapter adaptadorCategorias;
-
-
+    crudCache db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +34,24 @@ public class ListaCategorias extends Activity {
 
         listaCategorias = (ListView)findViewById(R.id.listViewCategorias2);
 
+        db = new crudCache(getApplicationContext());
+
+        if(EstadoInternet.isOnline(getApplicationContext()))
+            displayListOnLine(db);
+        else
+            displayListOffLine(db);
+    }
+
+    private void displayListOffLine(crudCache db) {
+        final List<Categoria> categoriasdts;
+        categoriasdts = db.getObjectsCategoria();
+        sendToView(categoriasdts);
+    }
+
+    private void displayListOnLine(crudCache db) {
         try {
-            final List<Categoria> categoriasdts;
-            if(EstadoInternet.isOnline(getBaseContext())) {
+                final List<Categoria> categoriasdts;
+
                 URL url = new URL("https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36");//https://itunes.apple.com/co/rss/topfreeapplications/limit=10/genre=6018/json
                 //"https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=36"
 
@@ -45,30 +59,8 @@ public class ListaCategorias extends Activity {
                 json.setContext(getBaseContext());
                 json.execute(url);
                 categoriasdts = json.get();
-            }
-            else{
-                categoriasdts = new crudCache(getBaseContext()).getObjectsCategoria();
-            }
-            adaptadorCategorias = new AdaptadorCategorias(this, categoriasdts);
-
-            listaCategorias.setAdapter(adaptadorCategorias);
-
-            listaCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    try {
-                        Intent intent = new Intent(getBaseContext(), ListaAplicaciones.class);
-                        intent.putExtra("categoria", categoriasdts.get(position).getCodigo());
-                        startActivity(intent);
-                    }catch(Exception e){
-
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-
+                db.insertDataCategoria(categoriasdts);
+                sendToView(categoriasdts);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -76,7 +68,26 @@ public class ListaCategorias extends Activity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
 
+    private void sendToView(final List<Categoria> categoriasdts) {
+        adaptadorCategorias = new AdaptadorCategorias(this, categoriasdts);
 
+        listaCategorias.setAdapter(adaptadorCategorias);
+
+        listaCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                try {
+                    Intent intent = new Intent(getBaseContext(), ListaAplicaciones.class);
+                    intent.putExtra("categoria", categoriasdts.get(position).getCodigo());
+                    startActivity(intent);
+                }catch(Exception e){
+
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

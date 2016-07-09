@@ -43,15 +43,18 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
             ");";
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "cache.sqlite";
-
+    public static final String DATABASE_NAME = "cacheITunesApp.sqlite";
+    SQLiteDatabase db;
     public crudCache(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
 
     @Override
     public boolean insertDataCategoria(List<Categoria> objects) {
-        SQLiteDatabase db = getWritableDatabase();
+        db = getWritableDatabase();
+        db.delete("categoria", null, null);
         boolean result= false;
         for (Categoria obj:objects)
         {
@@ -60,19 +63,21 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
                 valores.put("idCategoria", obj.getCodigo());
                 valores.put("nombreCategoria", obj.getNombre());
                 final long categoria = db.insert("categoria", null, valores);
-                db.close();
+
 
                 result= categoria>-1?true:false;
             }
 
         }
-
+        close();
+        Log.d("la tabla tiene: ", ""+this.getObjectsCategoria().size());
         return result;
     }
 
     @Override
     public boolean insertDataAplicacion(List<Aplicacion> objects) {
         SQLiteDatabase db = getWritableDatabase();
+        db.delete("aplicacion",null,null);
         boolean result= false;
         for (Aplicacion obj:objects)
         {
@@ -86,8 +91,10 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
                 valores.put("nombreImagen", obj.getNombre());
                 valores.put("imagen", getLogoImage(obj.getNombre()));
 
+                //TODO: extraer la imagen a byte para cguardarla en base de datos
+                valores.put("",obj.getImagebyte());
 
-                final long categoria = db.insert("controler/aplicacion", null, valores);
+                final long categoria = db.insert("aplicacion", null, valores);
 
                 db.close();
 
@@ -157,7 +164,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
 
         String[] args = new String[] {categoria};
 
-        Cursor c = db.query("controler/aplicacion", valores_recuperar,
+        Cursor c = db.query("aplicacion", valores_recuperar,
                 "categoria=?", args, null, null, null, null);
 
         c.moveToFirst();
@@ -183,35 +190,34 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
 
     @Override
     public void resetData() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + creadorCategoria);
-        db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
+        //SQLiteDatabase db = getWritableDatabase();
+        //db.execSQL("DROP TABLE IF EXISTS " + creadorCategoria);
+        //db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
     }
 
     @Override
     public void resetDataCategorias() {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + creadorCategoria);
-
+        db.delete("categoria",null,null);
+        db.close();
     }
 
     @Override
     public void resetDataAplicaciones() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
+        //SQLiteDatabase db = getWritableDatabase();
+        //db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(creadorCategoria+creadorAplicacion);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + creadorCategoria);
-        db.execSQL("DROP TABLE IF EXISTS " + creadorAplicacion);
-        onCreate(db);
+
     }
 
     private boolean checkDataBase() {

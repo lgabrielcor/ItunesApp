@@ -76,9 +76,6 @@ public class GsonCategoriaParser
         reader.endObject();
         reader.close();
 
-        new crudCache(this.context).resetDataCategorias();
-        new crudCache(this.context).insertDataCategoria(categorias);
-
         return categorias;
     }
 }

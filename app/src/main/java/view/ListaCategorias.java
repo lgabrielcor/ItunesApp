@@ -45,6 +45,7 @@ public class ListaCategorias extends Activity {
     private void displayListOffLine(crudCache db) {
         final List<Categoria> categoriasdts;
         categoriasdts = db.getObjectsCategoria();
+        Log.d("El array tiene ", categoriasdts.size()+" elementos");
         sendToView(categoriasdts);
     }
 

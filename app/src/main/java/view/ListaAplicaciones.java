@@ -19,6 +19,8 @@ import app.lugcor.co.com.itunesapp.R;
 import controler.aplicacion.JsonServicioClienteAplicacion;
 import controler.aplicacion.AdaptadorAplicaciones;
 
+import controler.util.EstadoInternet;
+import dao.crudCache;
 import model.Aplicacion;
 
 
@@ -26,7 +28,7 @@ public class ListaAplicaciones extends AppCompatActivity {
 
     ListView listaAplicaciones;
     ArrayAdapter adaptadorAplicaciones;
-
+    crudCache db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,17 +38,41 @@ public class ListaAplicaciones extends AppCompatActivity {
         setContentView(R.layout.activity_lista_aplicaciones);
 
         listaAplicaciones=(ListView)findViewById(R.id.listViewAplicaciones);
+        Bundle extras = getIntent().getExtras();
+        String Categoriastr ="";
+        if(extras!= null){
+            Categoriastr = extras.getString("categoria");
+        }
 
+
+        db = new crudCache(getApplicationContext());
+        if(EstadoInternet.isOnline(getApplicationContext()))
+            displayOnline(Categoriastr);
+        else
+            displayOffLine(Categoriastr);
+    }
+
+    private void displayOffLine(String cat) {
+        final List<Aplicacion> aplicacionesdts;
+        aplicacionesdts = db.getObjectsAplicacion(cat);
+
+        adaptadorAplicaciones = new AdaptadorAplicaciones(this, aplicacionesdts);
+
+        listaAplicaciones.setAdapter(adaptadorAplicaciones);
+
+        senToView(aplicacionesdts);
+    }
+
+    private void displayOnline(String cat) {
         try {
-            Bundle extras = getIntent().getExtras();
+
             URL url;
-            if(extras!= null){
-                url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre="+extras.getString("categoria")+"/json");
+            if(!cat.isEmpty()){
+                url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre="+cat+"/json");
             }
             else{
                 url = new URL("https://itunes.apple.com/co/rss/topfreeapplications/limit=50/genre=6005/json");
             }
-
 
             JsonServicioClienteAplicacion json = new JsonServicioClienteAplicacion();
             json.execute(url);
@@ -56,25 +82,9 @@ public class ListaAplicaciones extends AppCompatActivity {
 
             listaAplicaciones.setAdapter(adaptadorAplicaciones);
 
-            listaAplicaciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(getBaseContext(), AplicacionDetalle.class);
-                    Log.d("evento geneado"+position, "evento");
-                    //pasar parametros a detalle de aplicacion
-                    Aplicacion detalle = aplicacionesdts.get(position);
+            db.insertDataAplicacion(aplicacionesdts);
 
-                    intent.putExtra("nombre", detalle.getNombre());
-                    intent.putExtra("precio", detalle.getPrecio());
-                    intent.putExtra("resumen", detalle.getResumen());
-                    intent.putExtra("actualizacion", detalle.getUltimaActualizacion());
-                    intent.putExtra("categoria", detalle.getCategoria());
-                    intent.putExtra("imagen", detalle.getImagen());
-
-
-                    startActivity(intent);
-                }
-            });
+            senToView(aplicacionesdts);
 
         }catch (MalformedURLException e) {
             e.printStackTrace();
@@ -83,5 +93,27 @@ public class ListaAplicaciones extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    private void senToView(final List<Aplicacion> aplicacionesdts) {
+        listaAplicaciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getBaseContext(), AplicacionDetalle.class);
+                Log.d("evento geneado"+position, "evento");
+                //pasar parametros a detalle de aplicacion
+                Aplicacion detalle = aplicacionesdts.get(position);
+
+                intent.putExtra("nombre", detalle.getNombre());
+                intent.putExtra("precio", detalle.getPrecio());
+                intent.putExtra("resumen", detalle.getResumen());
+                intent.putExtra("actualizacion", detalle.getUltimaActualizacion());
+                intent.putExtra("categoria", detalle.getCategoria());
+                intent.putExtra("imagen", detalle.getImagen());
+
+
+                startActivity(intent);
+            }
+        });
     }
 }

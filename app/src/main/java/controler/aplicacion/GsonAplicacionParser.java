@@ -34,19 +34,7 @@ public class GsonAplicacionParser {
 
             for (int i =0; i< entry.length(); i++) {
                 aplicacion = new Aplicacion();
-                JSONObject jsonObject = entry.getJSONObject(i);
-
-                aplicacion.setNombre(jsonObject.getJSONObject("im:name").optString("label"));
-                aplicacion.setImagen(jsonObject.getJSONArray("im:image").getJSONObject(0).optString("label"));
-                aplicacion.setResumen(jsonObject.getJSONObject("summary").optString("label"));
-
-
-                aplicacion.setPrecio(jsonObject.getJSONObject("im:price").getJSONObject("attributes").optString("currency")+
-                        jsonObject.getJSONObject("im:price").getJSONObject("attributes").optString("amount"));
-
-                aplicacion.setCategoria(jsonObject.getJSONObject("category").getJSONObject("attributes").optString("label"));
-
-                aplicacion.setUltimaActualizacion(jsonObject.getJSONObject("im:releaseDate").optString("label"));
+                extraerAplicacion(aplicacion, entry, i);
 
                 aplicaciones.add(aplicacion);
             }
@@ -57,6 +45,22 @@ public class GsonAplicacionParser {
         }
 
         return aplicaciones;
+    }
+
+    private void extraerAplicacion(Aplicacion aplicacion, JSONArray entry, int i) throws JSONException {
+        JSONObject jsonObject = entry.getJSONObject(i);
+
+        aplicacion.setNombre(jsonObject.getJSONObject("im:name").optString("label"));
+        aplicacion.setImagen(jsonObject.getJSONArray("im:image").getJSONObject(0).optString("label"));
+        aplicacion.setResumen(jsonObject.getJSONObject("summary").optString("label"));
+
+
+        aplicacion.setPrecio(jsonObject.getJSONObject("im:price").getJSONObject("attributes").optString("currency")+
+                jsonObject.getJSONObject("im:price").getJSONObject("attributes").optString("amount"));
+
+        aplicacion.setCategoria(jsonObject.getJSONObject("category").getJSONObject("attributes").optString("label"));
+
+        aplicacion.setUltimaActualizacion(jsonObject.getJSONObject("im:releaseDate").optString("label"));
     }
 
     private String convertStreamToString(InputStream is) {

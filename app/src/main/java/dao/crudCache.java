@@ -31,7 +31,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
             "\t`nombreCategoria`\tTEXT NOT NULL\n" +
             ");";
 
-    String creadorAplicacion ="CREATE TABLE `controler.aplicacion` (\n" +
+    String creadorAplicacion ="CREATE TABLE `aplicacion` (\n" +
             "\t`idAplicacion`\tTEXT NOT NULL,\n" +
             "\t`nombre`\tTEXT NOT NULL,\n" +
             "\t`resumen`\tTEXT NOT NULL,\n" +
@@ -42,8 +42,8 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
             "\t`imagen`\tBLOB NOT NULL\n" +
             ");";
 
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "cacheITunesApp.sqlite";
+    public static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = "cacheITunesApp1.sqlite";
     SQLiteDatabase db;
     public crudCache(Context context) {
 
@@ -77,7 +77,7 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
     @Override
     public boolean insertDataAplicacion(List<Aplicacion> objects) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete("aplicacion",null,null);
+        //db.delete("aplicacion",null,null);
         boolean result= false;
         for (Aplicacion obj:objects)
         {
@@ -91,18 +91,15 @@ public class crudCache extends SQLiteOpenHelper  implements iCrud{
                 valores.put("nombreImagen", obj.getNombre());
                 valores.put("imagen", getLogoImage(obj.getNombre()));
 
-                //TODO: extraer la imagen a byte para cguardarla en base de datos
-                valores.put("",obj.getImagebyte());
-
                 final long categoria = db.insert("aplicacion", null, valores);
 
-                db.close();
+
 
                 result= categoria>-1?true:false;
             }
 
         }
-
+        db.close();
         return result;
     }
 

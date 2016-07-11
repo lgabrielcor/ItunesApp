@@ -44,8 +44,8 @@ public class ListaAplicaciones extends AppCompatActivity {
             Categoriastr = extras.getString("categoria");
         }
 
-
         db = new crudCache(getApplicationContext());
+
         if(EstadoInternet.isOnline(getApplicationContext()))
             displayOnline(Categoriastr);
         else
@@ -110,7 +110,6 @@ public class ListaAplicaciones extends AppCompatActivity {
                 intent.putExtra("actualizacion", detalle.getUltimaActualizacion());
                 intent.putExtra("categoria", detalle.getCategoria());
                 intent.putExtra("imagen", detalle.getImagen());
-
 
                 startActivity(intent);
             }

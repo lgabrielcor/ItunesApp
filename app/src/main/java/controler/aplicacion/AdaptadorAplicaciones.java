@@ -10,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -24,6 +26,7 @@ import model.Categoria;
  */
 public class AdaptadorAplicaciones extends ArrayAdapter
 {
+    private byte[] byteImage;
     public AdaptadorAplicaciones(Context context, List objects) {
 
         super(context, android.R.layout.two_line_list_item, objects);
@@ -48,11 +51,15 @@ public class AdaptadorAplicaciones extends ArrayAdapter
 
         nombreAplicacion.setText(item.getNombre());
         precio.setText(item.getPrecio());
-        ultimaActualizacion.setText("Ultima Versiòn: "+item.getUltimaActualizacion());
+        ultimaActualizacion.setText("Ultima Versión: "+item.getUltimaActualizacion());
         URL url = null;
         try {
             url = new URL(item.getImagen());
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            InputStream ips = url.openConnection().getInputStream();
+            Bitmap bmp = BitmapFactory.decodeStream(ips);
+
+            setByteImage(readBytes(ips));
+
             imagen.setImageBitmap(bmp);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -62,6 +69,32 @@ public class AdaptadorAplicaciones extends ArrayAdapter
 
 
         return v;
+    }
+
+    public byte[] getByteImage() {
+        return byteImage;
+    }
+
+    public void setByteImage(byte[] byteImage) {
+        this.byteImage = byteImage;
+    }
+
+    public byte[] readBytes(InputStream inputStream) throws IOException {
+        // this dynamically extends to take the bytes you read
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        // this is storage overwritten on each iteration with bytes
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        // we need to know how may bytes were read to write them to the byteBuffer
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+
+        // and then we can return your byte array.
+        return byteBuffer.toByteArray();
     }
 }
 
